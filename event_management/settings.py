@@ -68,7 +68,7 @@ WSGI_APPLICATION = 'event_management.wsgi.application'
 
 # Database
 ALLOWED_HOSTS=['*']
-CSRF_TRUSTED_ORIGINS = ['http://*.onrender.com','http://127.0.0.1:8000']
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com','http://127.0.0.1:8000',"https://event-management-django-gidq.onrender.com/categories/add/"]
 
 # For PostgreSQL database
 
