@@ -5,6 +5,6 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 
 urlpatterns = [
     
-    path('Event/', include('event.urls')),
+    path('', include('event.urls')),
     
 ]+ debug_toolbar_urls()

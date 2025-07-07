@@ -46,7 +46,7 @@ def delete_event(request, id):
         event.delete()
         messages.success(request, "Event Deleted Successfully")
         return redirect('dashboard')
-    return render(request, 'delete_event.html', {'event': event})
+    return render(request, 'event_form.html', {'event': event})
 
 def event_detail(request, id):
     event = get_object_or_404(Event, id=id)

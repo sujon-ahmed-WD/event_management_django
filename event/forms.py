@@ -61,6 +61,7 @@ class CategoryForm(StyledFormMixin, forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-input'}),
             'description': forms.Textarea(attrs={'class': 'form-textarea'}),
+            
         }
     def __init__(self, *arg, **kwarg):
         super().__init__(*arg, **kwarg)
