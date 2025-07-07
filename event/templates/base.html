@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Event Management{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <nav class="bg-green-700 text-white p-4">
+      <div class="max-w-7xl mx-auto flex justify-between">
+        <h1 class="font-bold text-xl">Event Manager</h1>
+        <div class="space-x-4">
+          <a href="{% url 'dashboard' %}" class="hover:underline">Dashboard</a>
+          <a href="{% url 'create_event' %}" class="hover:underline">Add Event</a>
+          <a href="{% url 'add_participant' %}" class="hover:underline">Add Participant</a>
+          <a href="{% url 'add_category' %}" class="hover:underline">Add Category</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto py-8 px-4">
+      {% if messages %}
+        <div class="mb-4">
+          {% for message in messages %}
+            <div
+              class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded mb-2"
+              role="alert"
+            >
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>
