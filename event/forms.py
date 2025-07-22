@@ -6,7 +6,10 @@ from .models import Event, Category, Participant
 """ Mixing Django forms with Tailwind CSS for styling """
 class StyledFormMixin:
     default_classes = "border border-gray-300 w-full p-3  rounded-lg shadow-sm focus:border-rose-500 focus:ring-rose-500"
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styles_widget()
+        
     def apply_styles_widget(self):
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.TextInput):
@@ -28,6 +31,11 @@ class StyledFormMixin:
                 field.widget.attrs.update({
                     'class': self.default_classes,
                     'placeholder': f"Enter {field.label.lower()}"
+                })
+            elif isinstance(field.widget,forms.PasswordInput):
+                field.widget.attrs.update({
+                    'class':self.default_classes,
+                    'placeholder':f"Select {field.label.lower()}"
                 })
              
 
