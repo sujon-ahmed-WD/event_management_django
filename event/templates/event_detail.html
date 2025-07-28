@@ -20,7 +20,14 @@
       {% empty %}
       <li>No participants registered.</li>
       {% endfor %}
+
+      <form method="POST" action="{% url 'rsvp-event' event.id %}">
+        {% csrf_token %}
+        <button class="bg-green-500 px-5 py-4 rounded-full">rsvp</button>
+      </form>
+      
     </ul>
+     
   </div>
 </div>
 {% endblock %}

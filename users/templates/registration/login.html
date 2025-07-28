@@ -8,10 +8,17 @@
     <title>Document</title>
   </head>
   <body>
+      <h1 class="text-center my-9 text-xl " >welcome in Login from</h1>
     <div class="w-1/2 mx-auto my-8">
+         {% if messages %}
+          {% for  message in messages  %}
+          <p class="bg-green-500">{{message}}</p>
+          {% endfor %}
+         {% endif %}
       <form method="POST">
         {% csrf_token %} {{ form }}
         <button
+          action="{% url 'sign_in' %}"
           class="bg-blue-500 px-2 py-1 rounded text-white mt-3"
           type="submit"
         >
