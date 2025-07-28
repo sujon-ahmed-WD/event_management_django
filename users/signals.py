@@ -19,6 +19,7 @@ def send_activation_email(sender,instance,created,**kwargs):
              send_mail(subject,message,settings.EMAIL_HOST_USER,recipient_list)
         except Exception as e:
             print(f"Failed to send email to {instance.email}:{str(e)}")
+    
         
 @receiver(post_save,sender=User)
 def assign_role(sender,instance,created,**kwargs):

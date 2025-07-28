@@ -1,4 +1,5 @@
 from datetime import date
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Event, Category
@@ -7,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 
 def is_admin(user):
@@ -32,16 +34,16 @@ def dashboard(request):
         'todays_events': events.filter(date=today),
     }
     return render(request, 'event.html', context)
-@user_passes_test(is_Organizer,login_url='no-permission')
+# @user_passes_test(is_Organizer,login_url='no-permission')
 def create_event(request):
-    form = EventForm(request.POST or None)
+    form = EventForm(request.POST,request.FILES )
     if request.method == 'POST' and form.is_valid():
         form.save()
         messages.success(request, "Event Created Successfully")
         return redirect('dashboard')
     return render(request, 'event_form.html', {'form': form})
 
-@user_passes_test(is_Organizer,login_url='no-permission')
+# @user_passes_test(is_Organizer,login_url='no-permission')
 def update_event(request, id):
     event = get_object_or_404(Event, id=id)
     form = EventForm(request.POST or None, instance=event)
@@ -51,7 +53,7 @@ def update_event(request, id):
         return redirect('dashboard')
     return render(request, 'event_form.html', {'form': form})
 
-@user_passes_test(is_Organizer,login_url='no-permission')
+# @user_passes_test(is_Organizer,login_url='no-permission')
 def delete_event(request, id):
     event = get_object_or_404(Event, id=id)
     if request.method == 'POST':
@@ -89,12 +91,25 @@ def add_category(request):
 @login_required
 def rsvp_event(request,event_id):
     event=get_object_or_404(Event,id=event_id)
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",request.user)
-    if request.user in event.participant.all(): # amier aga confromassion jonno 
+    user=request.user
+    if user in event.participant.all(): # amier aga confromassion jonno 
         messages.warning(request,"you have already RSVP'd to this event. ")
         
     else:
         event.participant.add(request.user)
-        messages.success(request,"RSVP Success fully!")
-    return redirect('event_detail.html',event_id=event.id)
+        messages.success(request,"RSVP successful! A confirmation email has been sent.")
         
+        send_mail(
+            subject="RSVP Confirmation Email",
+            message=f"Aslamolikum {user.username},\n\nYou have Successfully Rsvp'd to the event{event.name} ",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=True
+            
+        )
+
+    return redirect('event_detail',id=event.id)
+    
+def participant_dashboard(request):
+    rsvp_events=request.user.rsvp_events.all()
+    return render(request,'participant_dashboard.html',{"rsvp_events":rsvp_events})        

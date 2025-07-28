@@ -15,6 +15,7 @@ urlpatterns = [
     # Participant & Category
     path('categories/add/', views.add_category, name='add_category'),
     
-    path('event/<int:event_id>/rsvp',views.rsvp_event,name='rsvp-event')
+    path('event/<int:event_id>/rsvp/',views.rsvp_event,name='rsvp-event'),
+    path('event/participant_dashboard/',views.participant_dashboard,name='rsvp_all')
      
 ]

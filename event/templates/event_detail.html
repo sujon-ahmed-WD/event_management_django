@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block title %}Event Details{% endblock %}
 
 {% block content %}
@@ -15,19 +16,20 @@
   <div class="mt-6">
     <h4 class="text-lg font-semibold mb-2">Participants:</h4>
     <ul class="list-disc ml-6">
-      {% for participant in event.participants.all %}
-      <li>{{ participant.name }} ({{ participant.email }})</li>
+      {% for participant in event.participant.all %}
+        <li>{{ participant.username }} ({{ participant.email }})</li>
       {% empty %}
-      <li>No participants registered.</li>
+        <li>No participants registered.</li>
       {% endfor %}
-
-      <form method="POST" action="{% url 'rsvp-event' event.id %}">
-        {% csrf_token %}
-        <button class="bg-green-500 px-5 py-4 rounded-full">rsvp</button>
-      </form>
-      
     </ul>
-     
+
+    <!-- RSVP Button (Form) -->
+    <form method="POST" action="{% url 'rsvp-event' event.id %}" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600">
+        RSVP
+      </button>
+    </form>
   </div>
 </div>
 {% endblock %}

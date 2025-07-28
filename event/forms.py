@@ -49,7 +49,7 @@ class StyledFormMixin:
 class EventForm(StyledFormMixin, forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['name', 'description', 'date', 'time', 'location', 'category']
+        fields = ['name', 'description', 'date', 'time', 'location', 'category','image']
         widgets ={
             'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-input'}),
             'time': forms.TimeInput(attrs={'type': 'time', 'class': 'form-input'}),
