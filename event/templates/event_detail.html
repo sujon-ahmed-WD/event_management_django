@@ -3,33 +3,43 @@
 {% block title %}Event Details{% endblock %}
 
 {% block content %}
-<h2 class="text-2xl font-bold mb-6">Event Details</h2>
+<h2 class="text-3xl font-bold mb-6 text-center">Event Details</h2>
 
-<div class="bg-white p-6 rounded shadow">
-  <h3 class="text-xl font-bold mb-2">{{ event.name }}</h3>
-  <p><strong>Date:</strong> {{ event.date }}</p>
-  <p><strong>Time:</strong> {{ event.time }}</p>
-  <p><strong>Location:</strong> {{ event.location }}</p>
-  <p><strong>Category:</strong> {{ event.category.name }}</p>
-  <p class="mt-4">{{ event.description }}</p>
+<div class="bg-white rounded-xl shadow-lg p-6 md:p-10 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+  
+  <!-- Event Image -->
+  <div>
+     <img src="{{event.image.url}}" alt="hellkj">
 
-  <div class="mt-6">
-    <h4 class="text-lg font-semibold mb-2">Participants:</h4>
-    <ul class="list-disc ml-6">
-      {% for participant in event.participant.all %}
-        <li>{{ participant.username }} ({{ participant.email }})</li>
-      {% empty %}
-        <li>No participants registered.</li>
-      {% endfor %}
-    </ul>
+  <!-- Event Information -->
+  <div>
+    <h3 class="text-2xl font-bold mb-4 text-gray-800">{{ event.name }}</h3>
+    
+    <p class="mb-2"><span class="font-semibold">📅 Date:</span> {{ event.date }}</p>
+    <p class="mb-2"><span class="font-semibold">⏰ Time:</span> {{ event.time }}</p>
+    <p class="mb-2"><span class="font-semibold">📍 Location:</span> {{ event.location }}</p>
+    <p class="mb-2"><span class="font-semibold">🏷️ Category:</span> {{ event.category.name }}</p>
+     {% comment %} <p class="mt-4 text-gray-700">{{ event.description }}</p> {% endcomment %}
 
-    <!-- RSVP Button (Form) -->
-    <form method="POST" action="{% url 'rsvp-event' event.id %}" class="mt-4">
+    <!-- RSVP Button -->
+    <form method="POST" action="{% url 'rsvp-event' event.id %}" class="mt-6">
       {% csrf_token %}
-      <button type="submit" class="bg-green-500 text-white px-5 py-2 rounded-full hover:bg-green-600">
+      <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-full shadow transition">
         RSVP
       </button>
     </form>
+
+    <!-- Participant List -->
+    <div class="mt-8">
+      <h4 class="text-lg font-semibold mb-2">👥 Participants:</h4>
+      <ul class="list-disc list-inside text-gray-700">
+        {% for participant in event.participant.all %}
+          <li>{{ participant.username }} ({{ participant.email }})</li>
+        {% empty %}
+          <li>No participants registered yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 </div>
 {% endblock %}

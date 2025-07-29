@@ -13,9 +13,10 @@ from django.core.mail import send_mail
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
-
 def is_Organizer(user):
     return user.groups.filter(name='Organizer').exists()
+def is_participate(user):
+    return user.groups.filter(name='participate').exists()
 
 def home(request):
     return render(request, 'home.html')
@@ -34,7 +35,8 @@ def dashboard(request):
         'todays_events': events.filter(date=today),
     }
     return render(request, 'event.html', context)
-# @user_passes_test(is_Organizer,login_url='no-permission')
+
+@user_passes_test(is_Organizer,login_url='no-permission')
 def create_event(request):
     form = EventForm(request.POST,request.FILES )
     if request.method == 'POST' and form.is_valid():
@@ -43,7 +45,7 @@ def create_event(request):
         return redirect('dashboard')
     return render(request, 'event_form.html', {'form': form})
 
-# @user_passes_test(is_Organizer,login_url='no-permission')
+@user_passes_test(is_Organizer,login_url='no-permission')
 def update_event(request, id):
     event = get_object_or_404(Event, id=id)
     form = EventForm(request.POST or None, instance=event)
@@ -53,7 +55,7 @@ def update_event(request, id):
         return redirect('dashboard')
     return render(request, 'event_form.html', {'form': form})
 
-# @user_passes_test(is_Organizer,login_url='no-permission')
+@user_passes_test(is_Organizer,login_url='no-permission')
 def delete_event(request, id):
     event = get_object_or_404(Event, id=id)
     if request.method == 'POST':
@@ -77,6 +79,7 @@ def remove_participate(request,event_id,user_id):
 
 def event_detail(request, id):
     event = get_object_or_404(Event, id=id)
+    print("this is event",event.image.url)
     return render(request, 'event_detail.html', {'event': event})
 
 @user_passes_test(is_Organizer,login_url='no-permission')
@@ -92,7 +95,7 @@ def add_category(request):
 def rsvp_event(request,event_id):
     event=get_object_or_404(Event,id=event_id)
     user=request.user
-    if user in event.participant.all(): # amier aga confromassion jonno 
+    if user in event.participant.all(): 
         messages.warning(request,"you have already RSVP'd to this event. ")
         
     else:

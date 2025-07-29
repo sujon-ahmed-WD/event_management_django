@@ -54,7 +54,7 @@ def sign_in(request):
             return redirect("home")
     return render(request, "registration/login.html", {"form": form})
 
-# @login_required
+@login_required
 def logout_view(request):
     if request.method == "POST":
         logout(request)
@@ -118,6 +118,8 @@ def delete_group(request, group_id):
     del_group.delete()
     return redirect('group_list')
 
+user_passes_test(is_admin,login_url='no-permission')
 def group_list(request):
     groups=Group.objects.all()
     return render(request,'admin/group_list.html',{'groups':groups})
+
