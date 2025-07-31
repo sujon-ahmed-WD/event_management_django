@@ -1,130 +1,136 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-
-
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>EventHub</title>
 </head>
-<body>
-    <nav>
+<body class="bg-green-50 text-gray-800">
 
-<div class="bg-green-100">
-  <!-- Header -->
-  <header class="absolute inset-x-0 top-0 z-50">
-    <nav class=" bg-green-500 flex items-center justify-between p-6 lg:px-8" aria-label="Global">
-      <div class="flex lg:flex-1">
-        <a href="#" class="-m-1.5 p-1.5">
-          <span class="sr-only">EventHub</span>
-          <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="EventHub logo" />
-        </a>
+  <!-- Navbar -->
+  <header class="bg-green-300 shadow-md fixed top-0 w-full z-50">
+    <div class="max-w-7xl mx-auto flex items-center justify-between p-4">
+      <div class="flex items-center space-x-3">
+
+        <span class="text-xl font-bold">EventHub</span>
       </div>
-      <div class="flex lg:hidden">
-        <button type="button" command="show-modal" commandfor="mobile-menu" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
-          <span class="sr-only">Open main menu</span>
-          <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-        </button>
-      </div>
-      <div class="hidden lg:flex lg:gap-x-12">
-{% if 'Admin' in user_groups %}
-    <a href="{% url 'admin_dashboard' %}" class="text-sm font-semibold text-gray-900">Admin</a>
-    <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-gray-900">Dashboard</a>
-    <a href="{% url 'rsvp_all' %}" class="text-sm font-semibold text-gray-900">Participant</a>
 
-{% elif 'Organizer' in user_groups %}
-    <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-gray-900">Dashboard</a>
+      
 
-{% elif 'participate' in user_groups %}
-    <a href="{% url 'rsvp_all' %}" class="text-sm font-semibold text-gray-900">Participant</a>
+      <!-- Main Nav (Desktop) -->
+      <nav class="hidden md:flex space-x-6">
+        {% if 'Admin' in user_groups %}
+          <a href="{% url 'admin_dashboard' %}" class="hover:text-white font-medium">Admin</a>
+          <a href="{% url 'dashboard' %}" class="hover:text-white font-medium">Dashboard</a>
+          <a href="{% url 'rsvp_all' %}" class="hover:text-white font-medium">Participant</a>
+        {% elif 'Organizer' in user_groups %}
+          <a href="{% url 'dashboard' %}" class="hover:text-white font-medium">Dashboard</a>
+        {% elif 'participate' in user_groups %}
+          <a href="{% url 'rsvp_all' %}" class="hover:text-white font-medium">Participant</a>
+        {% endif %}
+      </nav>
 
-{% endif %}
-      </div>
-      <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <form action="{% url "logout" %}" method="POST">
-            {% csrf_token %}
-            <button  type="submit">logout</button>
-            
+      <!-- Auth Buttons -->
+      <div class="hidden md:flex space-x-2">
+        <form action="{% url 'logout' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-1.5 rounded-md text-sm shadow">Sign Out</button>
+        </form>
+        <form action="{% url 'sign_up' %}" method="POST">
+          {% csrf_token %}
+          <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1.5 rounded-md text-sm shadow">Sign In</button>
         </form>
       </div>
-    </nav>
+
+      <!-- Mobile Menu Button -->
+      <button class="md:hidden" onclick="toggleMenu()">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
 
     <!-- Mobile Menu -->
-    <el-dialog>
-      <dialog id="mobile-menu" class="backdrop:bg-transparent lg:hidden">
-        <div tabindex="0" class="fixed inset-0 focus:outline-none">
-          <el-dialog-panel class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white p-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-            <div class="flex items-center justify-between">
-              <a href="#" class="-m-1.5 p-1.5">
-                <span class="sr-only">EventHub</span>
-                <img class="h-8 w-auto" src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="EventHub logo" />
-              </a>
-              <button type="button" command="close" commandfor="mobile-menu" class="-m-2.5 rounded-md p-2.5 text-gray-700">
-                <span class="sr-only">Close menu</span>
-                <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div class="mt-6 flow-root">
-              <div class="-my-6 divide-y divide-gray-500/10">
-                <div class="space-y-2 py-6">
-            {% if 'Admin' in user_groups %}
-            <a href="{% url 'admin_dashboard' %}" class="text-sm font-semibold text-gray-900">Admin</a>
-            {% endif %}
-                  <a href="#" class="block px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Events</a>
-                  <a href="#" class="block px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Dashboard</a>
-                  <a href="#" class="block px-3 py-2 text-base font-semibold text-gray-900 hover:bg-gray-50">Contact</a>
-                </div>
-                <div class="py-6">
-                   <form action="{% url "logout" %}" method="POST">
-            {% csrf_token %}
-            <button type="submit">logout</button>
-            
-        </form>
-                </div>
-              </div>
-            </div>
-          </el-dialog-panel>
-        </div>
-      </dialog>
-    </el-dialog>
+    <div id="mobileMenu" class="md:hidden hidden bg-green-200 px-4 pb-4">
+      {% if 'Admin' in user_groups %}
+        <a href="{% url 'admin_dashboard' %}" class="block py-2 font-medium">Admin</a>
+        <a href="{% url 'dashboard' %}" class="block py-2 font-medium">Dashboard</a>
+        <a href="{% url 'rsvp_all' %}" class="block py-2 font-medium">Participant</a>
+      {% elif 'Organizer' in user_groups %}
+        <a href="{% url 'dashboard' %}" class="block py-2 font-medium">Dashboard</a>
+      {% elif 'participate' in user_groups %}
+        <a href="{% url 'rsvp_all' %}" class="block py-2 font-medium">Participant</a>
+      {% endif %}
+      <form action="{% url 'logout' %}" method="POST" class="mt-2">
+        {% csrf_token %}
+        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded">Sign Out</button>
+      </form>
+    </div>
   </header>
 
   <!-- Hero Section -->
-  <div class="relative isolate px-6 pt-14 lg:px-8">
-    <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 text-center">
-      <h2 >
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Welcome
-        {% if user.is_authenticated %}
-    {{user}}
-    {% else %}
-    annyoumas
-    {% endif %}    
-        </h1>
+<section class="pt-28 text-center px-6">
+  <h1 class="text-4xl font-bold text-gray-800 mb-2">
+    Welcome {% if user.is_authenticated %}{{ user }}{% else %}Anonymous{% endif %}
+  </h1>
+  <h2 class="text-2xl font-semibold text-gray-700 mb-4">All Your Events in One Place</h2>
+  <p class="text-gray-600 max-w-xl mx-auto mb-6">
+    Discover events, RSVP instantly, and manage everything in one dashboard. Simplify your event experience with our platform.
+  </p>
+
+    <!-- 🌟 Banner inside hero -->
+  <div class="bg-indigo-100 border border-indigo-300 text-indigo-800 px-6 py-4 rounded-lg max-w-2xl mx-auto mb-6 shadow">
+    🎉 <strong class="font-medium">New Feature:</strong> Now organizers can send event reminders by email! Check your dashboard.
+  </div>
+
+  <div class="flex justify-center gap-4">
+    <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-md shadow">Browse Events</a>
+    <a href="#" class="text-indigo-700 font-semibold hover:underline">Learn more →</a>
+  </div>
+  {% comment %} footer {% endcomment %}
+
+  <footer class="mt-20 bg-green-300 text-gray-800 py-10">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
     
-      </h2>
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-        All Your Events in One Place
-      </h1>
-      <p class="mt-6 text-lg leading-8 text-gray-600">
-        Discover events, RSVP instantly, and manage everything in one dashboard.
-        Simplify your event experience with our platform.
+    <!-- About -->
+    <div>
+      <h3 class="text-lg font-bold mb-2">About EventHub</h3>
+      <p class="text-sm leading-relaxed">
+        EventHub helps users manage, attend, and organize events easily and efficiently.
       </p>
-      <div class="mt-10 flex items-center justify-center gap-x-6">
-        <a href="#" class="rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500 shadow-md">Browse Events</a>
-        <a href="#" class="text-sm font-semibold text-gray-900">Learn more <span aria-hidden="true">→</span></a>
-      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h3 class="text-lg font-bold mb-2">Quick Links</h3>
+      <ul class="text-sm space-y-1">
+        <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+        <li><a href="#" class="hover:underline">Events</a></li>
+        <li><a href="#" class="hover:underline">RSVP Dashboard</a></li>
+        <li><a href="#" class="hover:underline">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div>
+      <h3 class="text-lg font-bold mb-2">Contact Us</h3>
+      <p class="text-sm">Email: support@eventhub.com</p>
+      <p class="text-sm">Phone: +880-123-456789</p>
     </div>
   </div>
-</div>
 
+  <!-- Bottom -->
+  <div class="text-center text-xs text-gray-700 mt-6">
+    &copy; 2025 EventHub. All rights reserved.
+  </div>
+</footer>
 
-
-    </nav>
-   
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+  </script>
 </body>
 </html>
