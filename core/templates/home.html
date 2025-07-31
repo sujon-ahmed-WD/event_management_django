@@ -10,9 +10,7 @@
 </head>
 <body>
     <nav>
-        <!-- Include this script tag or install `@tailwindplus/elements` via npm: -->
-<!-- Include this script tag or install `@tailwindplus/elements` via npm: -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1" type="module"></script> -->
+
 <div class="bg-green-100">
   <!-- Header -->
   <header class="absolute inset-x-0 top-0 z-50">
@@ -32,12 +30,18 @@
         </button>
       </div>
       <div class="hidden lg:flex lg:gap-x-12">
-        <span>{{user_groups}}</span>
-        {% if 'Admin'  in user_groups %}
-       <a href="{% url 'admin_dashboard' %}" class="text-sm font-semibold text-gray-900">Admin</a>
-       {% endif %}
-        <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-gray-900">Dashboard</a>
-        <a href="#" class="text-sm font-semibold text-gray-900">Contact</a>
+{% if 'Admin' in user_groups %}
+    <a href="{% url 'admin_dashboard' %}" class="text-sm font-semibold text-gray-900">Admin</a>
+    <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-gray-900">Dashboard</a>
+    <a href="{% url 'rsvp_all' %}" class="text-sm font-semibold text-gray-900">Participant</a>
+
+{% elif 'Organizer' in user_groups %}
+    <a href="{% url 'dashboard' %}" class="text-sm font-semibold text-gray-900">Dashboard</a>
+
+{% elif 'participate' in user_groups %}
+    <a href="{% url 'rsvp_all' %}" class="text-sm font-semibold text-gray-900">Participant</a>
+
+{% endif %}
       </div>
       <div class="hidden lg:flex lg:flex-1 lg:justify-end">
         <form action="{% url "logout" %}" method="POST">

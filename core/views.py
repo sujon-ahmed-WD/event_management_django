@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 # Create your views here.
 def hom(request):
@@ -6,3 +6,5 @@ def hom(request):
 
 def no_permission(request):
     return render(request,'no_permission.html')
+# def dashboard_redirect(request):
+#     return redirect('home')
