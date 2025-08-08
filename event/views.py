@@ -1,4 +1,5 @@
 from datetime import date
+from urllib import request
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -6,10 +7,17 @@ from .models import Event, Category
 from .forms import EventForm, CategoryForm
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import user_passes_test,login_required,permission_required
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.views import View
+from django.views.generic import UpdateView,DeleteView,DetailView,TemplateView
+ 
+from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 
+# variable for list of decorators
+decorators = [login_required,permission_required]
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
@@ -45,6 +53,26 @@ def create_event(request):
         return redirect('dashboard')
     return render(request, 'event_form.html', {'form': form})
 
+
+#----------------------This is Create Event----------------------------------
+@method_decorator(user_passes_test(is_Organizer,login_url='no-permission'),name='dispatch')
+class Create_Event(View):
+    template_name='event_form.html'
+    def get(self,request,*args,**kwargs):
+        form= EventForm()
+        return render(request, self.template_name, {'form': form})
+    def post(self,request,*args,**kwargs):
+         form= EventForm(request.POST,request.FILES)
+         if form.is_valid():
+             form.save()
+             messages.success(request,"Event Created Successfully")
+             redirect('dashboard')
+         return render(request, self.template_name, {'form': form})
+        
+
+         
+
+
 @user_passes_test(is_Organizer,login_url='no-permission')
 def update_event(request, id):
     event = get_object_or_404(Event, id=id)
@@ -55,6 +83,24 @@ def update_event(request, id):
         return redirect('dashboard')
     return render(request, 'event_form.html', {'form': form})
 
+# this is a Update_Event ...........................................
+@method_decorator(user_passes_test(is_Organizer,login_url='no-permission'),name='dispatch')
+class Update_Event(UpdateView):
+    model=Event
+    form_class=EventForm
+    template_name='event_form.html'
+    success_url=reverse_lazy('dashboard')
+    pk_url_kwarg = 'pk'
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['event']=self.get_object()
+        return context
+    def form_valid(self, form):
+         messages.success(self.request,"Event Update Successfully")
+         return super().form_valid(form)
+     
+            
+
 @user_passes_test(is_Organizer,login_url='no-permission')
 def delete_event(request, id):
     event = get_object_or_404(Event, id=id)
@@ -63,6 +109,19 @@ def delete_event(request, id):
         messages.success(request, "Event Deleted Successfully")
         return redirect('dashboard')
     return render(request, 'event_form.html', {'event': event})
+
+
+# class view in delete .................. 
+@method_decorator(user_passes_test(is_Organizer,login_url='no-permission'),name='dispatch')
+class Delete_event(DeleteView):
+    model=Event
+    template_name='event_form.html'
+    success_url=reverse_lazy('dashboard')
+    pk_url_kwarg = 'pk'
+    
+    def delete(self, request, *args, **kwargs):
+          messages.success(request, "Event Deleted Successfully")
+          return super().delete(request,*args,**kwargs)
 
 @user_passes_test(is_admin,login_url='no-permission')
 def remove_participate(request,event_id,user_id):
@@ -81,6 +140,14 @@ def event_detail(request, id):
     event = get_object_or_404(Event, id=id)
     print("this is event",event.image.url)
     return render(request, 'event_detail.html', {'event': event})
+
+
+# BEFORE in ----------------------------------- Event_Detail------------------------------------------------------------
+class EVENT_Detail(DetailView):
+    model=Event
+    template_name='event_detail.html'
+    pk_url_kwarg='pk'
+    
 
 @user_passes_test(is_Organizer,login_url='no-permission')
 def add_category(request):
@@ -116,3 +183,13 @@ def rsvp_event(request,event_id):
 def participant_dashboard(request):
     rsvp_events=request.user.rsvp_events.all()
     return render(request,'participant_dashboard.html',{"rsvp_events":rsvp_events})        
+
+#--------------- BEFORE IN Participant_DASHBOARD----------------------------------------------------------------
+
+class ParticipantDashboardView(TemplateView):
+    template_name='participant_dashboard.html'
+    
+    def get_context_data(self, **kwargs):
+        context= super().get_context_data(**kwargs)
+        context['rsvp_events']= self.request.user.rsvp_events.all()
+        return context

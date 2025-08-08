@@ -78,6 +78,8 @@ class CategoryForm(StyledFormMixin, forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-textarea'}),
             
         }
+     
+    
     def __init__(self, *arg, **kwarg):
         super().__init__(*arg, **kwarg)
-        self.apply_styles_widget()
+        
