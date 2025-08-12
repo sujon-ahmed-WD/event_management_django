@@ -20,7 +20,7 @@
 
       <!-- Main Nav (Desktop) -->
       <nav class="hidden md:flex space-x-6">
-        {% if 'Admin' in user_groups %}
+        {% if 'admin' in user_groups %}
           <a href="{% url 'admin_dashboard' %}" class="hover:text-white font-medium">Admin</a>
           <a href="{% url 'dashboard' %}" class="hover:text-white font-medium">Dashboard</a>
           <a href="{% url 'rsvp_all' %}" class="hover:text-white font-medium">Participant</a>
@@ -53,7 +53,7 @@
 
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="md:hidden hidden bg-green-200 px-4 pb-4">
-      {% if 'Admin' in user_groups %}
+      {% if 'admin' in user_groups %}
         <a href="{% url 'admin_dashboard' %}" class="block py-2 font-medium">Admin</a>
         <a href="{% url 'dashboard' %}" class="block py-2 font-medium">Dashboard</a>
         <a href="{% url 'rsvp_all' %}" class="block py-2 font-medium">Participant</a>

@@ -15,7 +15,7 @@
           class="block py-2 px-4 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition">
           Profile
         </a>
-        <a href="" class="block py-2 px-4 rounded-lg text-gray-700 hover:bg-gray-200 transition">
+        <a href="{% url 'update-profile' %}" class="block py-2 px-4 rounded-lg text-gray-700 hover:bg-gray-200 transition">
           Edit Profile
         </a>
         <a href="{% url 'password_Change' %}" class="block py-2 px-4 rounded-lg text-gray-700 hover:bg-gray-200 transition">
@@ -30,7 +30,7 @@
 
       <div class="flex flex-col md:flex-row items-center md:items-start mb-8">
         <img
-          src="https://png.pngtree.com/png-clipart/20231019/original/pngtree-user-profile-avatar-png-image_13369988.png"
+          src="{{profile_image}}"
           alt="User Avatar"
           class="w-28 h-28 rounded-full object-cover shadow-md mb-4 md:mb-0 md:mr-6"
         />
@@ -57,11 +57,9 @@
 
       <!-- Bio -->
       <div class="mt-8">
-        <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-1">Bio</h3>
+        <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-1">Phone number</h3>
         <p class="text-gray-600 leading-relaxed">
-          Passionate software developer with 5 years of experience in web technologies. 
-          Loves to create user-friendly and efficient applications. 
-          In free time, enjoys hiking and reading tech blogs.
+           {{phone}}
         </p>
       </div>
     </main>

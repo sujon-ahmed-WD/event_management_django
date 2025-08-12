@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .models import Event, Category
 from .forms import EventForm, CategoryForm
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test,login_required,permission_required
 from django.contrib.auth.decorators import login_required
@@ -16,13 +16,18 @@ from django.views.generic import UpdateView,DeleteView,DetailView,TemplateView
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 
+user=get_user_model()
 # variable for list of decorators
 decorators = [login_required,permission_required]
 
 def is_admin(user):
-    return user.groups.filter(name='Admin').exists()
-def is_Organizer(user):
-    return user.groups.filter(name='Organizer').exists()
+    return user.is_superuser or user.groups.filter(name='admin').exists()
+
+def is_organizer(user):
+    return user.is_authenticated and (user.is_superuser or user.groups.filter(name__iexact='Organizer').exists())
+
+def admin_or_organizer(user):
+    return is_admin(user) or is_organizer(user)
 def is_participate(user):
     return user.groups.filter(name='participate').exists()
 
@@ -44,7 +49,7 @@ def dashboard(request):
     }
     return render(request, 'event.html', context)
 
-@user_passes_test(is_Organizer,login_url='no-permission')
+@user_passes_test(is_organizer,login_url='no-permission')
 def create_event(request):
     form = EventForm(request.POST,request.FILES )
     if request.method == 'POST' and form.is_valid():
@@ -55,7 +60,7 @@ def create_event(request):
 
 
 #----------------------This is Create Event----------------------------------
-@method_decorator(user_passes_test(is_Organizer,login_url='no-permission'),name='dispatch')
+@method_decorator(user_passes_test(is_organizer,login_url='no-permission'),name='dispatch')
 class Create_Event(View):
     template_name='event_form.html'
     def get(self,request,*args,**kwargs):
@@ -73,7 +78,7 @@ class Create_Event(View):
          
 
 
-@user_passes_test(is_Organizer,login_url='no-permission')
+@user_passes_test(is_organizer,login_url='no-permission')
 def update_event(request, id):
     event = get_object_or_404(Event, id=id)
     form = EventForm(request.POST or None, instance=event)
@@ -84,7 +89,7 @@ def update_event(request, id):
     return render(request, 'event_form.html', {'form': form})
 
 # this is a Update_Event ...........................................
-@method_decorator(user_passes_test(is_Organizer,login_url='no-permission'),name='dispatch')
+@method_decorator(user_passes_test(is_organizer,login_url='no-permission'),name='dispatch')
 class Update_Event(UpdateView):
     model=Event
     form_class=EventForm
@@ -101,7 +106,7 @@ class Update_Event(UpdateView):
      
             
 
-@user_passes_test(is_Organizer,login_url='no-permission')
+@user_passes_test(is_organizer,login_url='no-permission')
 def delete_event(request, id):
     event = get_object_or_404(Event, id=id)
     if request.method == 'POST':
@@ -112,7 +117,7 @@ def delete_event(request, id):
 
 
 # class view in delete .................. 
-@method_decorator(user_passes_test(is_Organizer,login_url='no-permission'),name='dispatch')
+@method_decorator(user_passes_test(is_organizer,login_url='no-permission'),name='dispatch')
 class Delete_event(DeleteView):
     model=Event
     template_name='event_form.html'
@@ -149,7 +154,7 @@ class EVENT_Detail(DetailView):
     pk_url_kwarg='pk'
     
 
-@user_passes_test(is_Organizer,login_url='no-permission')
+@user_passes_test(is_organizer,login_url='no-permission')
 def add_category(request):
     form = CategoryForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():

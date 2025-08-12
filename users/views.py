@@ -11,12 +11,55 @@ from django.views.generic import TemplateView
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 
-from users.forms import LoginForm, RegisterForm, AssignRoleForm, create_from,CustomPasswordChangeForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm
+from users.forms import LoginForm, RegisterForm, AssignRoleForm, create_from,CustomPasswordChangeForm,CustomPasswordResetForm,CustomPasswordResetConfirmForm,EditProfileForm
 
 from django.contrib.auth.views import PasswordChangeView,PasswordResetView,PasswordResetConfirmView
 from django.urls import reverse_lazy
+# from users.models import UserProfile
+from django.views.generic import UpdateView
 
 # Create your views here.
+"""
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfile
+    template_name = 'accounts/update_profile.html'
+    context_object_name = 'form'
+    
+    def get_object(self):
+        return self.request.user
+    
+    def get_form_kwargs(self):
+        kwargs=super().get_form_kwargs()
+        kwargs['userprofile'] = UserProfile.objects.get(user=self.request.user)
+        return super().get_form_kwargs()
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_profile = UserProfile.objects.get(user=self.request.user)
+        print("views", user_profile)
+        context['form'] = self.form_class(
+            instance=self.object, userprofile=user_profile)
+        return context
+
+    def form_valid(self, form):
+        form.save(commit=True)
+        return redirect('profile')
+
+"""
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = 'accounts/update_profile.html'
+    context_object_name = 'form'
+    
+    def get_object(self):
+        return self.request.user
+    
+    def form_valid(self, form):
+        form.save(commit=True)
+        return redirect('profile')
+    
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
@@ -81,6 +124,11 @@ def activate_user(request, user_id, token):
 
 @user_passes_test(is_admin,login_url='no-permission')
 def admin_dashboard(request):
+    def is_admin(user):
+     return user.is_superuser or user.groups.filter(name='admin').exists()
+
+def is_organizer(user):
+    return user.is_authenticated and (user.is_superuser or user.groups.filter(name__iexact='Organizer').exists())
     users = User.objects.all()
     return render(request, "admin/dashboard.html", {"users": users})
 
@@ -102,7 +150,7 @@ def assign_role(request, user_id):
 
     return render(request, "admin/assign_role.html", {"form": form})
 
-user_passes_test(is_admin,login_url='no-permission')
+@user_passes_test(is_admin,login_url='no-permission')
 def create_group(request):
     if request.method == "POST":
         form = create_from(request.POST)
@@ -114,13 +162,13 @@ def create_group(request):
         form=create_from()
     return render(request, "admin/create_group.html", {"form": form})
 
-user_passes_test(is_admin,login_url='no-permission')
+@user_passes_test(is_admin,login_url='no-permission')
 def delete_group(request, group_id):
     del_group = get_object_or_404(Group, id=group_id)
     del_group.delete()
     return redirect('group_list')
 
-user_passes_test(is_admin,login_url='no-permission')
+@user_passes_test(is_admin,login_url='no-permission')
 def group_list(request):
     groups=Group.objects.all()
     return render(request,'admin/group_list.html',{'groups':groups})
@@ -135,6 +183,8 @@ class ProfileView(TemplateView):
         context['email']=user.email
         context['member_since']=user.date_joined
         context['last_login']=user.last_login
+        context['profile_image']=user.profile_image
+        context['phone']=user.phone
         
         return context
     

@@ -5,6 +5,10 @@ from event.forms import StyledFormMixin
 from django.contrib.auth.forms import AuthenticationForm
 
 from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPasswordForm
+from phonenumber_field.formfields import PhoneNumberField
+
+from users.models import CustomUser
+# from models import CustomUser
 
 class RegisterForm(StyledFormMixin,UserCreationForm):
     class Meta:
@@ -63,3 +67,40 @@ class  CustomPasswordResetForm(StyledFormMixin,PasswordResetForm):
 
 class CustomPasswordResetConfirmForm(StyledFormMixin,SetPasswordForm):
     pass
+""" 
+class EditProfile(StyledFormMixin,forms.ModelForm):
+    class Meta:
+        model= User
+        fields=['email','first_name','last_name']
+        
+    profile_image=forms.ImageField(required=False)
+    phone = PhoneNumberField(region="BD")
+    
+    def __init__(self, *args, **kwargs):
+        self.userprofile=kwargs.pop('userprofile',None)
+        super().__init__(*args, **kwargs)
+        print("forms",self.userprofile)
+        
+    def save(self,commit=True):
+        user=super().save(commit=False)
+        
+        if self.userprofile:
+            print("userprofile",userprofile.profile_image)
+            
+            self.fields['profile_image'].initial=self.userprofile.profile_image
+            self.fields['phone'].initial=self.userprofile.phone
+            
+            if commit:
+                print("userprofile",userprofile.profile_image)
+                self.userprofile.save()
+        if commit:
+            user.save()
+        
+        return user
+                
+    """
+
+class EditProfileForm(StyledFormMixin,forms.ModelForm):
+        class Meta:
+            model =CustomUser
+            fields=['email','first_name','last_name','profile_image','phone']
