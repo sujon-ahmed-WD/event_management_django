@@ -12,7 +12,7 @@ from users.models import CustomUser
 
 class RegisterForm(StyledFormMixin,UserCreationForm):
     class Meta:
-          model = User
+          model = CustomUser
           fields=['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
           
     def __init__(self, *args, **kwargs):

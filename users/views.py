@@ -17,6 +17,9 @@ from django.contrib.auth.views import PasswordChangeView,PasswordResetView,Passw
 from django.urls import reverse_lazy
 # from users.models import UserProfile
 from django.views.generic import UpdateView
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 # Create your views here.
 """
@@ -62,7 +65,7 @@ class EditProfileView(UpdateView):
     
 
 def is_admin(user):
-    return user.groups.filter(name='Admin').exists()
+    return user.groups.filter(name='admin').exists()
 
 def sign_up(request):
     if request.method == "POST":
@@ -124,13 +127,13 @@ def activate_user(request, user_id, token):
 
 @user_passes_test(is_admin,login_url='no-permission')
 def admin_dashboard(request):
-    def is_admin(user):
-     return user.is_superuser or user.groups.filter(name='admin').exists()
+    users = User.objects.all()
+    return render(request, "admin/dashboard.html", {"users": users})
+def is_admin(user):
+    return user.is_superuser or user.groups.filter(name='admin').exists()
 
 def is_organizer(user):
     return user.is_authenticated and (user.is_superuser or user.groups.filter(name__iexact='Organizer').exists())
-    users = User.objects.all()
-    return render(request, "admin/dashboard.html", {"users": users})
 
 @user_passes_test(is_admin,login_url='no-permission')
 def assign_role(request, user_id):

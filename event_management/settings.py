@@ -16,6 +16,7 @@ SECRET_KEY = 'django-insecure-@*e*8rw4p_-mt)7h24$y_-z1gxiao348rj#-f@w-tbo90lvf1e
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL='users.CustomUser'
 
 
 # Application definition
@@ -119,7 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL='users.CustomUser'
 
 
 # Internationalization

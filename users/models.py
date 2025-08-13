@@ -17,8 +17,6 @@ from event_management import settings
 #     def __str__(self):
 #         return f"{self.user.username } Profile"
     
-    
-
 
 class CustomUser(AbstractUser):
 	profile_image = models.ImageField(upload_to='profile_image',blank=True)
