@@ -79,123 +79,15 @@
     Discover events, RSVP instantly, and manage everything in one dashboard. Simplify your event experience with our platform.
   </p>
 
+     
     <!-- 🌟 Banner inside hero -->
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Carousel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-green-50 text-gray-800">
+  <div class="bg-indigo-100 border border-indigo-300 text-indigo-800 px-6 py-4 rounded-lg max-w-2xl mx-auto mb-6 shadow">
+    🎉 <strong class="font-medium">New Feature:</strong> Now organizers can send event reminders by email! Check your dashboard.
+  </div>
 
-<div id="carousel" class="relative z-50 flex h-60 w-full flex-col items-center justify-center gap-5 overflow-hidden bg-cover bg-center duration-1000 ease-linear before:absolute before:inset-0 before:bg-black/50 sm:h-96 md:h-[540px] lg:gap-10 xl:flex-row">
-
-    <!-- arrow -->
-    <div class="absolute bottom-1/4 z-50 flex gap-3 px-5">
-        <button id="prevBtn" class="flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/30 md:h-8 md:w-8">
-            &#8592;
-        </button>
-        <button id="nextBtn" class="flex h-6 w-6 items-center justify-center rounded-full hover:bg-white/30 md:h-8 md:w-8">
-            &#8594;
-        </button>
-    </div>
-
-    <!-- text container -->
-    <div id="carouselText" class="absolute left-0 w-1/2 rounded-lg px-4 text-white drop-shadow-lg">
-        <h1 id="carouselTitle" class="mb-3 lg:text-3xl"></h1>
-        <p id="carouselDesc" class="text-xs sm:text-sm md:text-base lg:text-lg"></p>
-    </div>
-
-    <!-- slider images -->
-    <div id="carouselImages" class="absolute -right-5 z-50 ml-auto w-1/2 overflow-hidden px-4 py-10 lg:-right-16">
-        <div id="sliderContainer" class="flex items-center gap-4 duration-300 ease-linear"></div>
-    </div>
-
-</div>
-
-<script>
-    // Slider data
-    const sliders = [
-        {
-            img: '{% static "images/img.1.jpg" %}',
-            title: 'Escape 1',
-            des: 'A Symphony of Tranquility. Experience the perfect blend of relaxation and excitement.'
-        },
-        {
-            img: '{% static "images/escape2.jpg" %}',
-            title: 'Escape 2',
-            des: 'A Symphony of Tranquility. Experience the perfect blend of relaxation and excitement.'
-        },
-        {
-            img: '{% static "images/escape3.jpg" %}',
-            title: 'Escape 3',
-            des: 'A Symphony of Tranquility. Experience the perfect blend of relaxation and excitement.'
-        },
-        {
-            img: '{% static "images/escape4.jpg" %}',
-            title: 'Escape 4',
-            des: 'A Symphony of Tranquility. Experience the perfect blend of relaxation and excitement.'
-        },
-        {
-            img: '{% static "images/escape5.jpg" %}',
-            title: 'Escape 5',
-            des: 'A Symphony of Tranquility. Experience the perfect blend of relaxation and excitement.'
-        }
-    ];
-
-    let currentSlider = 0;
-
-    const carousel = document.getElementById('carousel');
-    const carouselTitle = document.getElementById('carouselTitle');
-    const carouselDesc = document.getElementById('carouselDesc');
-    const sliderContainer = document.getElementById('sliderContainer');
-
-    function renderSlider() {
-        // Background image properly update
-        carousel.style.backgroundImage = `url('${sliders[currentSlider].img}')`;
-
-        // Text
-        carouselTitle.textContent = sliders[currentSlider].title;
-        carouselDesc.textContent = sliders[currentSlider].des;
-
-        // Slider images
-        sliderContainer.innerHTML = '';
-        sliders.forEach((slide, inx) => {
-            const img = document.createElement('img');
-            img.src = slide.img;
-            img.alt = slide.title;
-            img.className = `h-[180px] min-w-[90px] sm:h-[200px] lg:h-[320px] lg:min-w-[184px] rounded-lg bg-black/50 shadow-lg shadow-black drop-shadow-lg duration-300`;
-            sliderContainer.appendChild(img);
-        });
-
-        sliderContainer.style.transform = `translateX(-${currentSlider * 200}px)`;
-    }
-
-    function prevSlider() {
-        currentSlider = currentSlider === 0 ? sliders.length - 1 : currentSlider - 1;
-        renderSlider();
-    }
-
-    function nextSlider() {
-        currentSlider = currentSlider === sliders.length - 1 ? 0 : currentSlider + 1;
-        renderSlider();
-    }
-
-    document.getElementById('prevBtn').addEventListener('click', prevSlider);
-    document.getElementById('nextBtn').addEventListener('click', nextSlider);
-
-    // Initial render
-    renderSlider();
-
-    // Optional: Auto-slide every 5s
-    setInterval(nextSlider, 5000);
-</script>
-
-</body>
-</html>
+  <div class="flex justify-center gap-4">
+    <a href="#" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-md shadow">Browse Events</a>
+    <a href="#" class="text-indigo-700 font-semibold hover:underline">Learn more →</a>
 
   {% comment %} footer {% endcomment %}
 
