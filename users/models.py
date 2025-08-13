@@ -1,6 +1,4 @@
 from django.db import models
-# from django.contrib.auth.models import User,AbstractUser
-from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import AbstractUser,User
 from django.db import models
 
