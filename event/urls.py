@@ -14,7 +14,7 @@ urlpatterns = [
     path('events/delete/<int:pk>/', views.Delete_event.as_view(), name='delete_event'),
     # path('events/<int:id>/', views.event_detail, name='event_detail'),
     path('events/<int:pk>/', views.EVENT_Detail.as_view(), name='event_detail'),
-    path('event/<int:id>/remove-participate/<int:user_id>',views.remove_participate,name='remove_participate'),
+    path('event/<int:id>/remove-participate/<int:user_id>',views.remove_participant,name='remove_participate'),
 
     # Participant & Category
     path('categories/add/', views.add_category, name='add_category'),
