@@ -34,7 +34,7 @@ def assign_role(sender,instance,created,**kwargs):
 @receiver(post_save,sender=User)
 def create_or_update_user_profile(sender,instance,created,**kwargs):
     if created:
-        CustomUser.objects.create(user=instance)
+       pass
    
  
 
