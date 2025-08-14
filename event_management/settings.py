@@ -90,28 +90,28 @@ CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com','http://127.0.0.1:8000',"https:
 # }
 
 # sql lite database
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-# supabase database
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # তোমার ডাটাবেসের নাম
-        'USER': 'postgres',  # ডাটাবেস ইউজার
-        'PASSWORD': 'WA1wpU4PdlNEkT6X',  # এখানে তোমার আসল পাসওয়ার্ড বসাও
-        'HOST': 'db.wzrfmcllugnfkctcitbq.supabase.co',  # তোমার Supabase host
-        'PORT': '5432',  # ডিফল্ট PostgreSQL port
-        'OPTIONS': {
-            'sslmode': 'require',  # Supabase SSL চায়
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# # supabase database
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'postgres',  # তোমার ডাটাবেসের নাম
+#         'USER': 'postgres',  # ডাটাবেস ইউজার
+#         'PASSWORD': 'WA1wpU4PdlNEkT6X',  # এখানে তোমার আসল পাসওয়ার্ড বসাও
+#         'HOST': 'db.wzrfmcllugnfkctcitbq.supabase.co',  # তোমার Supabase host
+#         'PORT': '5432',  # ডিফল্ট PostgreSQL port
+#         'OPTIONS': {
+#             'sslmode': 'require',  # Supabase SSL চায়
+#         },
+#     }
+# }
 
 
 # DATABASES = {
