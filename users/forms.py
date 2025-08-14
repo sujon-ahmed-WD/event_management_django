@@ -5,7 +5,6 @@ from event.forms import StyledFormMixin
 from django.contrib.auth.forms import AuthenticationForm
 
 from django.contrib.auth.forms import PasswordChangeForm,PasswordResetForm,SetPasswordForm
-from phonenumber_field.formfields import PhoneNumberField
 
 from users.models import CustomUser
 # from models import CustomUser
