@@ -186,10 +186,17 @@ class ProfileView(TemplateView):
         context['email']=user.email
         context['member_since']=user.date_joined
         context['last_login']=user.last_login
-        context['profile_image']=user.profile_image
         context['phone']=user.phone
-        
+        # Safe check for profile image
+        if user.profile_image and hasattr(user.profile_image, 'url'):
+            context['profile_image'] = user.profile_image.url
+            print(context['profile_image'])
+        else:
+            context['profile_image'] = None  
+
         return context
+        
+         
     
 class ChangePassword(PasswordChangeView):
     template_name='accounts/password_change.html'

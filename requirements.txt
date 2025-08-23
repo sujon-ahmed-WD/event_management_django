@@ -11,3 +11,6 @@ psycopg-binary==3.2.9
 psycopg2-binary==2.9.10
 sqlparse==0.5.3
 tzdata==2025.2
+
+github link: https://github.com/sujon-ahmed-WD/event_management_django/tree/mid-exam
+live link : https://event-management-django-mid-exam.onrender.com/
