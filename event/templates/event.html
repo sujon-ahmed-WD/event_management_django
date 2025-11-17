@@ -46,12 +46,12 @@
       <a href="{% url 'event_detail' event.id %}" class="text-blue-600 hover:underline"
         >View</a
       >
-      <a href="{% url 'update_event' event.id %}" class="text-yellow-600 hover:underline"
+      <a href="{% url 'update_event' event.pk %}" class="text-yellow-600 hover:underline"
         >Edit</a
       >
       <form
         method="POST"
-        action="{% url 'delete_event' event.id %}"
+        action="{% url 'delete_event' event.pk %}"
         class="inline"
       >
         {% csrf_token %}
